@@ -10,7 +10,7 @@ In 2005, on [“The Old New Thing” blog](https://blogs.msdn.microsoft.com/oldn
 I created a Visual Studio 2015 solution containing several iterations of the dictionary loading program that appeared in that series. In addition, out of curiosity, I also added some code to test ATL’s CString (more precisely: CStringW) instead of STL’s wstring.
 
 I built the code with VS2015 with Update 3, in 32-bit release mode, and executed it on an Intel i7-6700 @ 3.40GHz, 32GB of RAM and Windows 10.
-The dictionary file I used for the tests can be downloaded from [here](http://www.mdbg.net/chindict/chindict.php?page=cc-cedict). I also included a copy of it in this repository.
+The dictionary file I used for the tests can be downloaded from [here](http://www.mdbg.net/chindict/chindict.php?page=cc-cedict). I also included a copy of it in this repository. Note that, when running the tests, the dictionary file must be in the same directory containing the executable files.
 
 The relase date of this CEDICT dictionary file is 2016-09-11; this version of the dictionary has 114,822 entries.
 
@@ -29,7 +29,7 @@ In this table I compare my times with those published on the original blog serie
 | Test  | Time excluding destructors [ms] | Time including destructors [ms] |
 | ----- |:----------------------------------------------------:|:----------------------------------------------------:|
 | #1: Uses C++ standard **I/O streams**, **codecvt** and **STL wstring**. ([Original](https://blogs.msdn.microsoft.com/oldnewthing/20050510-55/?p=35673)) | 641 (2080) | 651 (2140) |
-| #2: Uses **memory-mapped files, MultiByteToWideChar** and STL wstring. ([Original](https://blogs.msdn.microsoft.com/oldnewthing/20050516-30/?p=35633) | 105 (240) | 118 (300) |
+| #2: Uses **memory-mapped files, MultiByteToWideChar** and STL wstring. ([Original](https://blogs.msdn.microsoft.com/oldnewthing/20050516-30/?p=35633)) | 105 (240) | 118 (300) |
 | #2A: Uses memory-mapped files, MultiByteToWideChar and **ATL CStringW**. | 111 (N/A) | 127 (N/A) |
 | #3: Uses memory-mapped files, MultiByteToWideChar and **raw C-style strings** (with the default allocator, i.e. new[]). ([Original](https://blogs.msdn.microsoft.com/oldnewthing/20050518-42/?p=35613)) | 58 (120) | 73 (290) |
 | #4: Uses memory-mapped files, MultiByteToWideChar and **custom pool string allocator**. ([Original](https://blogs.msdn.microsoft.com/oldnewthing/20050519-00/?p=35603)) | 50 (70) | 50 (80) |

@@ -38,7 +38,7 @@ Reading those numbers, I draw the following conclusions:
 
 * The C++ standard I/O streams and locale/codecvt for UTF-8 to UTF-16 conversions are _very slow_ (#1). 
 
-  As soon as the implementation changes to memory-mapped files and Win32 MultiByteToWideChar (#2), the performance jumps from a total time of 650 ms to less than 120 ms. (The original numbers are 240 ms, or 300 ms including destructors.) Basically, running this code today, compiled with VS2015 on an Intel i7-6700 CPU, we get less than _half_ the execution times that the author got in 2005, e.g. 105 ms of dictionary loading time today vs. 240 ms back in 2005. I
+  As soon as the implementation changes to memory-mapped files and Win32 MultiByteToWideChar (#2), the performance jumps from a total time of 650 ms to less than 120 ms. (The original numbers published in The Old New Thing blog are 240 ms, and 300 ms including destructors.) Basically, running this code today, compiled with VS2015 on an Intel i7-6700 CPU, we get less than _half_ the execution times that the author got in 2005, e.g. 105 ms of dictionary loading time today vs. 240 ms back in 2005.
   
   I don’t know what hardware was used for testing the original code in 2005, but I think that C++11 improvements like move semantics play an important role in the increase of STL string performance.
   
@@ -52,6 +52,6 @@ Reading those numbers, I draw the following conclusions:
 
 * Using a custom string pool allocator (#4) reduces the time from the raw string pointer case (#3) by just 8 ms if we exclude destructors, i.e. from 58 ms of loading time to 50 ms. (If we include destructors, the performance increase is slightly better, with execution time reduced from 73 ms of test #3 to 50 ms with a custom pool allocator.) So, in cases like this, I think a custom memory allocator is not worth the code complication.
 
-*	Using raw C-style string pointers and the default memory allocator (I think C++ new[] calls C malloc which calls Win32 HeapAlloc) as in #3 results today in better (shorter) times than those obtained with a custom pool allocator and published in 2005. In fact, the best times in the original 2005 series were 70 ms and 80 ms including destructors, and those times were obtained with a custom pool allocator; instead today I got 58 ms (73 ms with destructors) with the default memory allocator.
+*	Using raw C-style string pointers and the _default_ memory allocator (I think C++ new[] calls C malloc which calls Win32 HeapAlloc) as in #3 results today in better (shorter) times than those obtained with a custom pool allocator and published in 2005. In fact, the best times in the original 2005 series were 70 ms and 80 ms including destructors, and those times were obtained with a custom pool allocator; instead today I got 58 ms (73 ms with destructors) with the _default_ memory allocator.
 
 All in all, I’d be happy with the optimization level reached in #2: Ditch C++ standard I/O streams and locale/codecvt in favor of memory-mapped files for reading files and MultiByteToWideChar Win32 API for UTF-8 to UTF-16 conversions, but just continue using the STL’s wstring class!
